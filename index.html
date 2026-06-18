@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quill Life | Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FDFCF8; color: #3D2B1F; }
+        .serif { font-family: 'Playfair Display', serif; }
+        .bg-warm { background-color: #FDFCF8; }
+        .text-cacao { color: #3D2B1F; }
+        .bg-terracotta { background-color: #A0522D; }
+        .border-parchment { border-color: #EAD7BB; }
+    </style>
+</head>
+<body>
+    <!-- PROTOTYPE NAVIGATION (Only for Navid to switch views) -->
+    <div class="bg-black text-white p-2 text-xs flex justify-center gap-4 sticky top-0 z-50 opacity-50 hover:opacity-100">
+        <button onclick="show('landing')">1. Landing Page</button>
+        <button onclick="show('studio')">2. Writing Studio</button>
+        <button onclick="show('admin')">3. Admin Radar</button>
+    </div>
+
+    <!-- LANDING PAGE VIEW -->
+    <div id="landing" class="view">
+        <nav class="flex justify-between items-center px-10 py-6 border-b border-parchment bg-white">
+            <div class="text-3xl font-bold serif"><span class="text-[#A0522D]">Quill</span> Life</div>
+            <button class="bg-terracotta text-white px-6 py-2 rounded-full font-bold">Get a Demo</button>
+        </nav>
+        <header class="px-10 py-20 max-w-6xl mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2">
+                <h1 class="text-6xl serif font-bold leading-tight mb-6">Where Wisdom <br/><span class="text-[#A0522D]">Finds a Voice.</span></h1>
+                <p class="text-2xl leading-relaxed opacity-90 mb-10">The premier cognitive vitality platform for senior living. Designed by scientists to bridge the generational gap through the power of story.</p>
+                <button class="bg-terracotta text-white px-10 py-5 rounded-xl text-2xl font-bold shadow-xl">Apply as a Charter Partner</button>
+            </div>
+            <div class="md:w-1/2 flex justify-center mt-10 md:mt-0">
+                <div class="w-72 h-96 bg-[#EAD7BB] rounded-2xl shadow-2xl rotate-3 border-8 border-white flex items-center justify-center text-6xl">✍️</div>
+            </div>
+        </header>
+    </div>
+
+    <!-- WRITING STUDIO VIEW (Hidden by default) -->
+    <div id="studio" class="view hidden">
+        <div class="max-w-4xl mx-auto p-6">
+            <div class="text-center mb-10">
+                <p class="uppercase tracking-widest text-sm opacity-60 font-bold mb-2">The Daily Spark • Aug 14</p>
+                <h2 class="text-4xl serif font-bold">"What is one piece of advice you'd give to your 25-year-old self?"</h2>
+            </div>
+            <div class="bg-white rounded-3xl shadow-2xl p-10 min-h-[500px] border border-parchment relative">
+                <textarea class="w-full h-80 text-2xl serif border-none focus:ring-0 italic" placeholder="I would tell myself to..."></textarea>
+                <button class="absolute bottom-10 right-10 bg-terracotta text-white p-8 rounded-full shadow-2xl flex flex-col items-center">
+                    <span class="text-4xl">🎤</span>
+                    <span class="text-xs font-bold uppercase mt-2">Click to Speak</span>
+                </button>
+            </div>
+            <div class="mt-8 flex justify-between items-center">
+                <button class="text-xl font-bold text-cacao border-2 border-cacao px-8 py-3 rounded-xl">🔒 Private Draft</button>
+                <button class="bg-terracotta text-white px-12 py-5 rounded-xl text-2xl font-bold">Publish Story</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN RADAR VIEW (Hidden by default) -->
+    <div id="admin" class="view hidden bg-gray-50 min-h-screen">
+        <div class="p-10">
+            <h2 class="text-3xl serif font-bold mb-8">Oakwood Manor: Wellness Radar</h2>
+            <div class="grid grid-cols-3 gap-8 mb-12">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-parchment">
+                    <p class="text-xs font-bold opacity-50 uppercase">Active Writers</p>
+                    <p class="text-5xl font-bold">42</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-parchment">
+                    <p class="text-xs font-bold opacity-50 uppercase">Stories This Week</p>
+                    <p class="text-5xl font-bold">128</p>
+                </div>
+                <div class="bg-orange-50 p-8 rounded-2xl shadow-sm border border-orange-200">
+                    <p class="text-xs font-bold text-orange-600 uppercase">Wellness Alerts</p>
+                    <p class="text-5xl font-bold text-orange-700">2</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-parchment overflow-hidden">
+                <div class="p-6 bg-gray-100 border-b border-parchment font-bold">High Priority Observation</div>
+                <table class="w-full text-left">
+                    <tr class="border-b border-gray-100"><td class="p-6 font-bold">Mary Robinson</td><td class="p-6 text-orange-700 font-bold">Inactive 10 Days</td><td class="p-6 text-right"><button class="text-terracotta font-bold">View History</button></td></tr>
+                    <tr><td class="p-6 font-bold">Arthur Chen</td><td class="p-6 text-orange-700 font-bold">Inactive 7 Days</td><td class="p-6 text-right"><button class="text-terracotta font-bold">View History</button></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function show(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
