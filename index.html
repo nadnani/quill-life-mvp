@@ -11,7 +11,7 @@
         :root {
             --bg-main: #FBFAF9;
             --text-main: #111827;
-            --accent: #7C2D12; /* Deep Mahogany */
+            --accent: #7C2D12;
             --border-light: #E5E7EB;
         }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-main); color: var(--text-main); }
@@ -19,13 +19,16 @@
         .heritage { font-family: 'Libre Baskerville', serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Professional Navigation */
+        /* Navigation */
         .sidebar-link:hover { background-color: #F3F4F6; color: var(--accent); }
         .active-link { background-color: #F3F4F6; color: var(--accent); border-right: 3px solid var(--accent); }
         
-        /* Clean View Transitions */
-        .fade-in { animation: fadeIn 0.3s ease-out; }
+        /* Smooth Transitions */
+        .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Notification Badge */
+        .badge { position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background-color: #EF4444; border-radius: 50%; border: 2px solid white; }
     </style>
 </head>
 <body class="antialiased">
@@ -35,7 +38,6 @@
         <!-- SIDEBAR NAVIGATION -->
         <aside class="w-64 bg-white border-r border-gray-200 hidden lg:flex flex-col sticky top-0 h-screen">
             <div class="p-8">
-                <!-- REVERTED LOGO: Stately Serif + Clean Sans -->
                 <div class="text-2xl tracking-tight">
                     <span class="heritage font-bold text-[#7C2D12]">Quill</span><span class="font-light text-gray-400">Life</span>
                 </div>
@@ -50,6 +52,10 @@
                 </button>
                 <button onclick="navigate('library')" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link" id="nav-library">
                     <i data-lucide="book-open" class="w-5 h-5 mr-3"></i> My Archives
+                </button>
+                <div class="pt-4 pb-2 px-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Management</div>
+                <button onclick="navigate('admin')" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link" id="nav-admin">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3"></i> Wellness Radar
                 </button>
             </nav>
 
@@ -67,13 +73,17 @@
             <header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-40">
                 <div class="relative w-96" id="search-container">
                     <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
-                    <input type="text" placeholder="Search stories, poems, or writers..." class="w-full pl-10 pr-4 py-2 bg-gray-100 border-none rounded-md text-sm focus:ring-1 focus:ring-[#7C2D12] outline-none">
+                    <input type="text" placeholder="Search the Society..." class="w-full pl-10 pr-4 py-2 bg-gray-100 border-none rounded-md text-sm focus:ring-1 focus:ring-[#7C2D12] outline-none">
                 </div>
                 <div class="flex items-center gap-6">
-                    <button class="text-gray-400 hover:text-[#7C2D12]"><i data-lucide="bell" class="w-6 h-6"></i></button>
+                    <!-- Notifications with Badge -->
+                    <button class="relative text-gray-400 hover:text-[#7C2D12]">
+                        <i data-lucide="bell" class="w-6 h-6"></i>
+                        <span class="badge"></span>
+                    </button>
                     <div class="flex items-center gap-3">
                         <div class="w-8 h-8 rounded-full bg-[#7C2D12] flex items-center justify-center text-white text-xs font-bold">NA</div>
-                        <span class="text-sm font-semibold text-gray-700 underline underline-offset-4 decoration-[#7C2D12]">Dr. Adnani</span>
+                        <span class="text-sm font-semibold text-gray-700">Dr. Adnani</span>
                     </div>
                 </div>
             </header>
@@ -81,30 +91,36 @@
             <!-- VIEW: HOME FEED -->
             <div id="view-home" class="view-content fade-in">
                 <div class="max-w-3xl mx-auto py-10 px-6">
-                    
                     <div class="flex gap-4 mb-10 overflow-x-auto no-scrollbar pb-2">
-                        <button class="px-5 py-2 bg-gray-900 text-white rounded-full text-xs font-bold uppercase tracking-wider">All Work</button>
-                        <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Poetry</button>
+                        <button class="px-5 py-2 bg-gray-900 text-white rounded-full text-xs font-bold uppercase tracking-wider">Discovery</button>
                         <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Memoirs</button>
-                        <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Essays</button>
+                        <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Poetry</button>
+                        <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Recipes</button>
+                    </div>
+
+                    <!-- DAILY SPARK (INTEGRATED INTO FEED) -->
+                    <div class="mb-12 bg-[#7C2D12] rounded-xl p-8 text-white shadow-lg flex items-center justify-between">
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-70 mb-2">Today's Prompt</p>
+                            <h2 class="serif text-2xl font-bold leading-tight max-w-md">"What is the most important lesson life taught you that you couldn't have learned any other way?"</h2>
+                        </div>
+                        <button onclick="navigate('editor')" class="bg-white text-[#7C2D12] px-6 py-3 rounded font-bold uppercase text-xs tracking-widest hover:bg-gray-100 transition-colors">Respond</button>
                     </div>
 
                     <div class="space-y-12">
-                        <!-- Feed Story Card -->
-                        <article class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm transition-all hover:shadow-md">
+                        <article class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all">
                             <div class="p-8">
                                 <div class="flex justify-between items-center mb-6">
                                     <div class="flex items-center gap-3">
-                                        <!-- Professional Geometric Avatar -->
-                                        <div class="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500 font-bold text-xs uppercase">AC</div>
+                                        <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-400 font-bold text-xs">AC</div>
                                         <div>
                                             <h4 class="font-bold text-sm">Arthur Chen</h4>
-                                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Memoir • Aug 14</p>
+                                            <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-0.5">Memoir • 5m read</p>
                                         </div>
                                     </div>
-                                    <button class="text-[#7C2D12] text-xs font-bold uppercase tracking-widest border border-[#7C2D12] px-3 py-1 rounded hover:bg-[#7C2D12] hover:text-white transition-all">Follow</button>
+                                    <button class="text-[#7C2D12] text-[10px] font-bold uppercase tracking-widest border border-[#7C2D12] px-3 py-1 rounded hover:bg-[#7C2D12] hover:text-white transition-all">Follow</button>
                                 </div>
-                                <h2 class="serif text-3xl font-bold mb-4 leading-tight">The Midnight Train to Emeryville</h2>
+                                <h2 class="serif text-3xl font-bold mb-4 leading-tight underline decoration-gray-100">The Midnight Train to Emeryville</h2>
                                 <p class="serif text-xl text-gray-600 leading-relaxed line-clamp-3 mb-8">
                                     "In 1952, the fog in the East Bay didn't just sit on the water; it felt like a heavy woolen blanket. I remember the sound of the whistle, a lonely call that promised adventure elsewhere..."
                                 </p>
@@ -125,13 +141,64 @@
                 </div>
             </div>
 
-            <!-- VIEW: FOLLOWING FEED -->
-            <div id="view-following" class="view-content hidden fade-in">
-                <div class="max-w-3xl mx-auto py-10 px-6 text-center">
-                    <div class="py-20">
-                        <i data-lucide="users" class="w-12 h-12 mx-auto mb-4 text-gray-200"></i>
-                        <h2 class="serif text-2xl font-bold mb-2">Your Inner Circle</h2>
-                        <p class="text-gray-500">Stories from the writers you follow will appear here.</p>
+            <!-- VIEW: ADMIN RADAR (B2B SaaS Dashboard) -->
+            <div id="view-admin" class="view-content hidden fade-in">
+                <div class="max-w-5xl mx-auto py-10 px-8">
+                    <header class="mb-10 flex justify-between items-end">
+                        <div>
+                            <h2 class="serif text-4xl font-bold mb-2">Wellness Radar</h2>
+                            <p class="text-gray-500 font-medium">Oakwood Manor • Resident Engagement Metrics</p>
+                        </div>
+                        <button class="bg-[#7C2D12] text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-widest">Generate Monthly Journal</button>
+                    </header>
+
+                    <div class="grid grid-cols-3 gap-6 mb-10">
+                        <div class="bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Active Writers</p>
+                            <p class="text-3xl font-bold">42</p>
+                            <p class="text-xs text-green-600 font-bold mt-2">↑ 12% vs last week</p>
+                        </div>
+                        <div class="bg-white p-6 border border-gray-200 rounded-xl shadow-sm">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Words Published</p>
+                            <p class="text-3xl font-bold">14,204</p>
+                            <p class="text-xs text-gray-400 font-medium mt-2">Avg 340 words / resident</p>
+                        </div>
+                        <div class="bg-red-50 p-6 border border-red-100 rounded-xl shadow-sm">
+                            <p class="text-[10px] font-bold text-red-400 uppercase tracking-widest mb-2">Withdrawal Alerts</p>
+                            <p class="text-3xl font-bold text-red-600">2</p>
+                            <p class="text-xs text-red-500 font-bold mt-2">Attention Required</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                        <div class="px-6 py-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">
+                            <h3 class="text-sm font-bold uppercase tracking-widest">Resident Vitality Index</h3>
+                            <span class="text-[10px] font-bold text-gray-400 italic">Sorted by engagement frequency</span>
+                        </div>
+                        <table class="w-full text-left">
+                            <thead class="text-[10px] uppercase tracking-widest text-gray-400 bg-white border-b border-gray-100">
+                                <tr>
+                                    <th class="px-6 py-4">Resident</th>
+                                    <th class="px-6 py-4">Last Entry</th>
+                                    <th class="px-6 py-4">Status</th>
+                                    <th class="px-6 py-4 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-gray-800">Mary Robinson</td>
+                                    <td class="px-6 py-4 text-gray-500">14 days ago</td>
+                                    <td class="px-6 py-4"><span class="bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">At Risk</span></td>
+                                    <td class="px-6 py-4 text-right"><button class="text-[#7C2D12] font-bold text-xs">Notify Family</button></td>
+                                </tr>
+                                <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 font-bold text-gray-800">Arthur Chen</td>
+                                    <td class="px-6 py-4 text-gray-500">Today</td>
+                                    <td class="px-6 py-4"><span class="bg-green-100 text-green-600 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase">Highly Active</span></td>
+                                    <td class="px-6 py-4 text-right"><button class="text-[#7C2D12] font-bold text-xs">View Works</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -148,8 +215,9 @@
                                 <option>Memoir</option>
                                 <option>Poetry</option>
                                 <option>Essay</option>
+                                <option>Recipe</option>
                             </select>
-                            <button class="bg-[#7C2D12] text-white px-8 py-2 rounded font-bold hover:bg-[#5E220E] transition-all">Publish</button>
+                            <button class="bg-[#7C2D12] text-white px-8 py-2 rounded font-bold hover:bg-[#5E220E] transition-all">Publish Entry</button>
                         </div>
                     </div>
                     <input type="text" placeholder="Title of your piece..." class="serif w-full text-5xl font-bold border-none outline-none mb-8 placeholder-gray-100">
