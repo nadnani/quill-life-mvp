@@ -3,189 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quill Life | Discovery</title>
+    <title>Quill Life | Professional Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <!-- Lucide Icons for Professional UI -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; color: #111827; }
         .serif { font-family: 'Merriweather', serif; }
+        .heritage { font-family: 'Libre Baskerville', serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Navigation Styles */
         .sidebar-link:hover { background-color: #F3F4F6; color: #7C2D12; }
         .active-link { background-color: #F3F4F6; color: #7C2D12; border-right: 4px solid #7C2D12; }
+        
+        /* Editor Animations */
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body class="antialiased">
 
-    <div class="flex min-h-screen">
+    <div id="app-root" class="flex min-h-screen">
         
-        <!-- LEFT SIDEBAR NAVIGATION (YouTube/LinkedIn Style) -->
+        <!-- SIDEBAR NAVIGATION -->
         <aside class="w-64 bg-white border-r border-gray-200 hidden lg:flex flex-col sticky top-0 h-screen">
             <div class="p-8">
-                <div class="text-xl font-bold tracking-tighter text-gray-900 uppercase">Quill Life</div>
+                <!-- LOGO: Color & Font Differentiation for Legibility -->
+                <div class="text-2xl tracking-tight">
+                    <span class="heritage font-bold text-[#7C2D12]">Quill</span><span class="font-light text-gray-400">Life</span>
+                </div>
             </div>
             
             <nav class="flex-1 px-4 space-y-1">
-                <a href="#" class="flex items-center px-4 py-3 text-sm font-semibold rounded-lg active-link">
+                <button onclick="navigate('home')" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg active-link" id="nav-home">
                     <i data-lucide="home" class="w-5 h-5 mr-3"></i> Home
-                </a>
-                <a href="#" class="flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
+                </button>
+                <button onclick="navigate('library')" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link" id="nav-library">
                     <i data-lucide="book-open" class="w-5 h-5 mr-3"></i> My Library
-                </a>
-                <a href="#" class="flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
+                </button>
+                <button class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
                     <i data-lucide="users" class="w-5 h-5 mr-3"></i> Following
-                </a>
-                <a href="#" class="flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
-                    <i data-lucide="bookmark" class="w-5 h-5 mr-3"></i> Saved
-                </a>
+                </button>
             </nav>
 
             <div class="p-4 border-t border-gray-200">
-                <button onclick="openEditor()" class="w-full flex items-center justify-center bg-[#7C2D12] text-white py-3 rounded-lg font-bold hover:bg-[#5E220E] transition-colors shadow-sm">
+                <button onclick="navigate('editor')" class="w-full flex items-center justify-center bg-[#7C2D12] text-white py-3 rounded-lg font-bold hover:bg-[#5E220E] transition-all shadow-md">
                     <i data-lucide="pen-tool" class="w-4 h-4 mr-2"></i> New Story
                 </button>
             </div>
         </aside>
 
-        <!-- MAIN CONTENT AREA -->
-        <main class="flex-1">
+        <!-- MAIN WINDOW -->
+        <div class="flex-1 flex flex-col">
             
-            <!-- TOP BAR (Search & Profile) -->
+            <!-- TOP BAR -->
             <header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-40">
-                <div class="relative w-96">
+                <div class="relative w-96" id="search-container">
                     <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
-                    <input type="text" placeholder="Search stories, poems, or writers..." class="w-full pl-10 pr-4 py-2 bg-gray-100 border-none rounded-md text-sm focus:ring-2 focus:ring-[#7C2D12] outline-none">
+                    <input type="text" placeholder="Search the Society..." class="w-full pl-10 pr-4 py-2 bg-gray-100 border-none rounded-md text-sm focus:ring-1 focus:ring-[#7C2D12] outline-none">
                 </div>
                 <div class="flex items-center gap-6">
                     <button class="text-gray-500 hover:text-[#7C2D12]"><i data-lucide="bell" class="w-6 h-6"></i></button>
-                    <div class="flex items-center gap-3 cursor-pointer">
-                        <div class="w-8 h-8 rounded-full bg-gray-300"></div>
-                        <span class="text-sm font-semibold">Navid Adnani</span>
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-[#7C2D12] flex items-center justify-center text-white text-xs font-bold">NA</div>
+                        <span class="text-sm font-semibold text-gray-700">Dr. Adnani</span>
                     </div>
                 </div>
             </header>
 
-            <!-- FEED SECTION -->
-            <div class="max-w-3xl mx-auto py-10 px-6">
-                
-                <!-- Category Tabs -->
-                <div class="flex gap-4 mb-10 overflow-x-auto no-scrollbar">
-                    <button class="px-5 py-2 bg-gray-900 text-white rounded-full text-xs font-bold uppercase tracking-wider">All Stories</button>
-                    <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Poetry</button>
-                    <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Memoirs</button>
-                    <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Reflections</button>
-                    <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Letters</button>
-                </div>
-
-                <!-- FEED ITEMS -->
-                <div class="space-y-12">
-                    
-                    <!-- Story Card 1 -->
-                    <article class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                        <div class="p-8">
-                            <div class="flex justify-between items-center mb-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-gray-200"></div>
-                                    <div>
-                                        <h4 class="font-bold text-sm">Arthur Chen</h4>
-                                        <p class="text-xs text-gray-500 uppercase font-semibold">Memoir • 5m read</p>
-                                    </div>
-                                </div>
-                                <button class="text-[#7C2D12] text-xs font-bold uppercase tracking-tighter hover:underline">Follow</button>
-                            </div>
-                            <h2 class="serif text-3xl font-bold mb-4 leading-tight">The Midnight Train to Emeryville</h2>
-                            <p class="serif text-xl text-gray-700 leading-relaxed line-clamp-3 mb-6">
-                                "In 1952, the fog in the East Bay didn't just sit on the water; it felt like a heavy woolen blanket. I remember the sound of the whistle, a lonely call that promised adventure elsewhere..."
-                            </p>
-                            <div class="flex justify-between items-center border-t border-gray-100 pt-6">
-                                <div class="flex gap-4">
-                                    <button class="flex items-center text-gray-500 hover:text-red-600 transition-colors">
-                                        <i data-lucide="heart" class="w-5 h-5 mr-2"></i> <span class="text-sm font-bold">12</span>
-                                    </button>
-                                    <button class="flex items-center text-gray-500 hover:text-[#7C2D12] transition-colors">
-                                        <i data-lucide="volume-2" class="w-5 h-5 mr-2"></i> <span class="text-sm font-bold">Listen</span>
-                                    </button>
-                                </div>
-                                <button class="text-gray-400 hover:text-gray-900"><i data-lucide="share-2" class="w-5 h-5"></i></button>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Story Card 2 -->
-                    <article class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                        <div class="p-8">
-                            <div class="flex justify-between items-center mb-6">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-gray-200"></div>
-                                    <div>
-                                        <h4 class="font-bold text-sm">Martha G.</h4>
-                                        <p class="text-xs text-gray-500 uppercase font-semibold">Poetry • 2m read</p>
-                                    </div>
-                                </div>
-                                <button class="text-[#7C2D12] text-xs font-bold uppercase tracking-tighter hover:underline">Follow</button>
-                            </div>
-                            <h2 class="serif text-3xl font-bold mb-4 leading-tight">Seasons of the Garden</h2>
-                            <p class="serif text-xl text-gray-700 leading-relaxed italic mb-6">
-                                "The secret isn't in the flower or the yeast.<br/> It is in the patience of the hands that knead the dough..."
-                            </p>
-                            <div class="flex justify-between items-center border-t border-gray-100 pt-6">
-                                <div class="flex gap-4">
-                                    <button class="flex items-center text-gray-500 hover:text-red-600 transition-colors">
-                                        <i data-lucide="heart" class="w-5 h-5 mr-2"></i> <span class="text-sm font-bold">42</span>
-                                    </button>
-                                    <button class="flex items-center text-gray-500 hover:text-[#7C2D12] transition-colors">
-                                        <i data-lucide="volume-2" class="w-5 h-5 mr-2"></i> <span class="text-sm font-bold">Listen</span>
-                                    </button>
-                                </div>
-                                <button class="text-gray-400 hover:text-gray-900"><i data-lucide="share-2" class="w-5 h-5"></i></button>
-                            </div>
-                        </div>
-                    </article>
-
-                </div>
-            </div>
-        </main>
-
-        <!-- RIGHT SIDEBAR (Inspiration & Daily Spark) -->
-        <aside class="w-80 bg-white border-l border-gray-200 hidden xl:flex flex-col sticky top-0 h-screen p-8">
-            <div class="bg-gray-50 rounded-xl p-6 mb-8 border border-gray-100">
-                <h3 class="text-xs font-bold uppercase tracking-widest text-[#7C2D12] mb-4">Daily Spark</h3>
-                <p class="font-bold text-lg mb-6 leading-tight">"What was the first car you ever owned, and where did it take you?"</p>
-                <button class="w-full bg-white border border-gray-200 py-3 rounded-lg text-sm font-bold shadow-sm hover:border-[#7C2D12] transition-colors">Respond to Prompt</button>
-            </div>
-
-            <div>
-                <h3 class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6 border-b border-gray-100 pb-2">Trending Writers</h3>
-                <div class="space-y-6">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-gray-200"></div>
-                            <span class="text-sm font-bold">Robert L.</span>
-                        </div>
-                        <button class="text-xs font-bold text-[#7C2D12]">Follow</button>
+            <!-- VIEW: HOME FEED -->
+            <div id="view-home" class="view-content fade-in">
+                <div class="max-w-3xl mx-auto py-10 px-6">
+                    <div class="flex gap-4 mb-10 overflow-x-auto no-scrollbar">
+                        <button class="px-5 py-2 bg-gray-900 text-white rounded-full text-xs font-bold uppercase tracking-wider">All Stories</button>
+                        <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Poetry</button>
+                        <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Memoirs</button>
                     </div>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-full bg-gray-200"></div>
-                            <span class="text-sm font-bold">Sarah V.</span>
-                        </div>
-                        <button class="text-xs font-bold text-[#7C2D12]">Follow</button>
-                    </div>
-                </div>
-            </div>
-        </aside>
 
-    </div>
-
-    <!-- Initialization Script -->
-    <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
-
-        function openEditor() {
-            alert("Opening the Writing Studio...");
-        }
-    </script>
-</body>
-</html>
+                    <div class="space-y-12">
+                        <article class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="p-8">
+                                <div class="flex justify-between items-center mb-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400"><i data-lucide="user"></i></div>
+                                        <div>
+                                            <h4 class="font-bold text-sm">Arthur Chen</h4>
+                                            <p class="text-xs text-gray-500 uppercase font-semibold tracking-tighter">Memoir • Aug 14</p>
+                                        </div>
+                                    </div>
+                                    <button class="text-[#7C2D12] text-xs font-bold uppercase tracking-widest hover:underline">Follow</button>
+                                </div>
+                                <h2 class="serif text-3xl font-bold mb-4 leading-tight">The Midnight Train to Emeryville</h2>
+                                <p class="serif text-xl text-gray-700 leading-relaxed line-clamp-3 mb-6">
+                                    "In 1952, the fog in the East Bay didn't just sit on the water; it felt like a heavy woolen blanket..."
+                                </p>
+                                <div class="flex justify-between items-center border-t border-gray-50 pt-6">
+                                    <div class="flex gap-6">
+                                        <button class="flex items-center text-gray-400 hover:text-red-600 transition-colors">
+                                            <i data-lucide="heart" class="w-5 h-5 mr-2"></i> <span class="text-sm font-bold">12</span>
+                                        </button>
+                                        <button class="flex items-center text-gray-400 hover:text-[#7C2D12] transition-colors">
+                                            <i data-lucide="volume-2" class="w-5 h-5 mr-2"></i> <span class="text-sm font-bold">Listen</span>
+                                        </button>
+                                    </div>
+                                    <button class="text-gray-300 hover:text-gray-600"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+                                </div>
+                            </div>
+                        </article>
