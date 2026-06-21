@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quill Life | Professional Edition</title>
+    <title>Quill Life | The Literary Society</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Fonts: Heritage Cursive, Professional UI, and Literary Serif -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pinyon+Script&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; color: #111827; }
+        :root {
+            --parchment: #FAF7F2;
+            --ink: #2D1B10;
+            --terracotta: #A0522D;
+            --clay-light: #E8DFD3;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--parchment); color: var(--ink); }
         .serif { font-family: 'Merriweather', serif; }
-        .heritage { font-family: 'Libre Baskerville', serif; }
+        .cursive { font-family: 'Pinyon Script', cursive; }
+        
+        /* Navigation & UI States */
+        .sidebar-link:hover { background-color: var(--clay-light); color: var(--terracotta); }
+        .active-link { background-color: var(--clay-light); color: var(--terracotta); border-right: 4px solid var(--terracotta); }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         
-        /* Navigation Styles */
-        .sidebar-link:hover { background-color: #F3F4F6; color: #7C2D12; }
-        .active-link { background-color: #F3F4F6; color: #7C2D12; border-right: 4px solid #7C2D12; }
+        /* Smooth Transitions */
+        .view-transition { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Editor Animations */
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Buttons */
+        .btn-primary { background-color: var(--terracotta); color: white; transition: all 0.2s; }
+        .btn-primary:hover { background-color: #8B4513; transform: translateY(-1px); }
     </style>
 </head>
 <body class="antialiased">
@@ -27,29 +38,30 @@
     <div id="app-root" class="flex min-h-screen">
         
         <!-- SIDEBAR NAVIGATION -->
-        <aside class="w-64 bg-white border-r border-gray-200 hidden lg:flex flex-col sticky top-0 h-screen">
-            <div class="p-8">
-                <!-- LOGO: Color & Font Differentiation for Legibility -->
-                <div class="text-2xl tracking-tight">
-                    <span class="heritage font-bold text-[#7C2D12]">Quill</span><span class="font-light text-gray-400">Life</span>
+        <aside class="w-72 bg-[#F3EEE5] border-r border-[#DED3C1] hidden lg:flex flex-col sticky top-0 h-screen">
+            <div class="p-10">
+                <!-- LOGO: Old World Cursive meets Modern Clean -->
+                <div class="flex flex-col">
+                    <span class="cursive text-5xl text-[var(--terracotta)] leading-none">Quill</span>
+                    <span class="text-xs font-bold uppercase tracking-[0.4em] text-gray-400 ml-1 mt-1">Life</span>
                 </div>
             </div>
             
-            <nav class="flex-1 px-4 space-y-1">
-                <button onclick="navigate('home')" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg active-link" id="nav-home">
-                    <i data-lucide="home" class="w-5 h-5 mr-3"></i> Home
+            <nav class="flex-1 px-6 space-y-2">
+                <button onclick="navigate('home')" class="w-full flex items-center px-4 py-4 text-base font-semibold rounded-lg active-link" id="nav-home">
+                    <i data-lucide="home" class="w-6 h-6 mr-4"></i> Home
                 </button>
-                <button onclick="navigate('library')" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link" id="nav-library">
-                    <i data-lucide="book-open" class="w-5 h-5 mr-3"></i> My Library
+                <button onclick="navigate('library')" class="w-full flex items-center px-4 py-4 text-base font-semibold rounded-lg sidebar-link" id="nav-library">
+                    <i data-lucide="book-open" class="w-6 h-6 mr-4"></i> My Archives
                 </button>
-                <button class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
-                    <i data-lucide="users" class="w-5 h-5 mr-3"></i> Following
+                <button class="w-full flex items-center px-4 py-4 text-base font-semibold rounded-lg sidebar-link">
+                    <i data-lucide="users" class="w-6 h-6 mr-4"></i> Following
                 </button>
             </nav>
 
-            <div class="p-4 border-t border-gray-200">
-                <button onclick="navigate('editor')" class="w-full flex items-center justify-center bg-[#7C2D12] text-white py-3 rounded-lg font-bold hover:bg-[#5E220E] transition-all shadow-md">
-                    <i data-lucide="pen-tool" class="w-4 h-4 mr-2"></i> New Story
+            <div class="p-6 border-t border-[#DED3C1]">
+                <button onclick="navigate('editor')" class="w-full flex items-center justify-center btn-primary py-4 rounded-xl font-bold shadow-lg">
+                    <i data-lucide="pen-tool" class="w-5 h-5 mr-2"></i> New Entry
                 </button>
             </div>
         </aside>
@@ -58,56 +70,155 @@
         <div class="flex-1 flex flex-col">
             
             <!-- TOP BAR -->
-            <header class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center sticky top-0 z-40">
+            <header class="bg-[#FAF7F2]/80 backdrop-blur-md border-b border-[#DED3C1] px-10 py-5 flex justify-between items-center sticky top-0 z-40">
                 <div class="relative w-96" id="search-container">
-                    <i data-lucide="search" class="absolute left-3 top-3 w-4 h-4 text-gray-400"></i>
-                    <input type="text" placeholder="Search the Society..." class="w-full pl-10 pr-4 py-2 bg-gray-100 border-none rounded-md text-sm focus:ring-1 focus:ring-[#7C2D12] outline-none">
+                    <i data-lucide="search" class="absolute left-4 top-3.5 w-5 h-5 text-[#DED3C1]"></i>
+                    <input type="text" placeholder="Search the collection..." class="w-full pl-12 pr-4 py-3 bg-[#E8DFD3]/40 border-none rounded-xl text-base focus:ring-1 focus:ring-[var(--terracotta)] outline-none placeholder-[#B8A890]">
                 </div>
-                <div class="flex items-center gap-6">
-                    <button class="text-gray-500 hover:text-[#7C2D12]"><i data-lucide="bell" class="w-6 h-6"></i></button>
-                    <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-[#7C2D12] flex items-center justify-center text-white text-xs font-bold">NA</div>
-                        <span class="text-sm font-semibold text-gray-700">Dr. Adnani</span>
+                <div class="flex items-center gap-8">
+                    <button class="text-[#B8A890] hover:text-[var(--terracotta)]"><i data-lucide="bell" class="w-7 h-7"></i></button>
+                    <div class="flex items-center gap-4 cursor-pointer">
+                        <div class="w-10 h-10 rounded-full border-2 border-[var(--terracotta)] bg-[#E8DFD3] flex items-center justify-center text-[var(--terracotta)] font-bold">NA</div>
+                        <span class="text-base font-bold text-[var(--ink)]">Dr. Adnani</span>
                     </div>
                 </div>
             </header>
 
             <!-- VIEW: HOME FEED -->
-            <div id="view-home" class="view-content fade-in">
-                <div class="max-w-3xl mx-auto py-10 px-6">
-                    <div class="flex gap-4 mb-10 overflow-x-auto no-scrollbar">
-                        <button class="px-5 py-2 bg-gray-900 text-white rounded-full text-xs font-bold uppercase tracking-wider">All Stories</button>
-                        <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Poetry</button>
-                        <button class="px-5 py-2 bg-white border border-gray-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-[#7C2D12]">Memoirs</button>
+            <div id="view-home" class="view-content view-transition">
+                <div class="max-w-4xl mx-auto py-12 px-8">
+                    
+                    <div class="flex gap-6 mb-12 overflow-x-auto no-scrollbar">
+                        <button class="px-8 py-2.5 bg-[var(--ink)] text-white rounded-full text-sm font-bold uppercase tracking-widest">All Work</button>
+                        <button class="px-8 py-2.5 bg-white border border-[#DED3C1] rounded-full text-sm font-bold uppercase tracking-widest hover:border-[var(--terracotta)]">Poetry</button>
+                        <button class="px-8 py-2.5 bg-white border border-[#DED3C1] rounded-full text-sm font-bold uppercase tracking-widest hover:border-[var(--terracotta)]">Memoirs</button>
+                        <button class="px-8 py-2.5 bg-white border border-[#DED3C1] rounded-full text-sm font-bold uppercase tracking-widest hover:border-[var(--terracotta)]">Recipes</button>
                     </div>
 
-                    <div class="space-y-12">
-                        <article class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-                            <div class="p-8">
-                                <div class="flex justify-between items-center mb-6">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400"><i data-lucide="user"></i></div>
+                    <div class="space-y-16">
+                        <!-- Story Card -->
+                        <article class="bg-white border border-[#DED3C1] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+                            <div class="p-10">
+                                <div class="flex justify-between items-center mb-8">
+                                    <div class="flex items-center gap-4 cursor-pointer" onclick="navigate('profile')">
+                                        <div class="w-14 h-14 rounded-full bg-[#FAF7F2] border border-[#DED3C1] flex items-center justify-center text-2xl">👴</div>
                                         <div>
-                                            <h4 class="font-bold text-sm">Arthur Chen</h4>
-                                            <p class="text-xs text-gray-500 uppercase font-semibold tracking-tighter">Memoir • Aug 14</p>
+                                            <h4 class="font-bold text-lg leading-tight">Arthur Chen</h4>
+                                            <p class="text-xs text-[var(--terracotta)] uppercase font-bold tracking-widest mt-1">Memoir • Emeryville Chapter</p>
                                         </div>
                                     </div>
-                                    <button class="text-[#7C2D12] text-xs font-bold uppercase tracking-widest hover:underline">Follow</button>
+                                    <button class="px-4 py-1.5 border border-[var(--terracotta)] text-[var(--terracotta)] text-xs font-bold uppercase rounded hover:bg-[var(--terracotta)] hover:text-white transition-colors">Follow Writer</button>
                                 </div>
-                                <h2 class="serif text-3xl font-bold mb-4 leading-tight">The Midnight Train to Emeryville</h2>
-                                <p class="serif text-xl text-gray-700 leading-relaxed line-clamp-3 mb-6">
-                                    "In 1952, the fog in the East Bay didn't just sit on the water; it felt like a heavy woolen blanket..."
+                                <h2 class="serif text-4xl font-bold mb-6 leading-tight">The Midnight Train to Emeryville</h2>
+                                <p class="serif text-2xl text-[var(--ink)] opacity-90 leading-relaxed line-clamp-3 mb-8">
+                                    "In 1952, the fog in the East Bay didn't just sit on the water; it felt like a heavy woolen blanket. I remember the sound of the whistle, a lonely call that promised adventure elsewhere..."
                                 </p>
-                                <div class="flex justify-between items-center border-t border-gray-50 pt-6">
-                                    <div class="flex gap-6">
-                                        <button class="flex items-center text-gray-400 hover:text-red-600 transition-colors">
-                                            <i data-lucide="heart" class="w-5 h-5 mr-2"></i> <span class="text-sm font-bold">12</span>
+                                <div class="flex justify-between items-center border-t border-[#FAF7F2] pt-8">
+                                    <div class="flex gap-10">
+                                        <button class="flex items-center text-[#B8A890] hover:text-red-600 font-bold transition-colors">
+                                            <i data-lucide="heart" class="w-6 h-6 mr-3"></i> 24
                                         </button>
-                                        <button class="flex items-center text-gray-400 hover:text-[#7C2D12] transition-colors">
-                                            <i data-lucide="volume-2" class="w-5 h-5 mr-2"></i> <span class="text-sm font-bold">Listen</span>
+                                        <button class="flex items-center text-[#B8A890] hover:text-[var(--terracotta)] font-bold transition-colors">
+                                            <i data-lucide="volume-2" class="w-6 h-6 mr-3"></i> Listen to Story
                                         </button>
                                     </div>
-                                    <button class="text-gray-300 hover:text-gray-600"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+                                    <button class="text-[#DED3C1] hover:text-[var(--ink)]"><i data-lucide="share" class="w-6 h-6"></i></button>
                                 </div>
                             </div>
                         </article>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: AUTHOR PROFILE -->
+            <div id="view-profile" class="view-content hidden view-transition">
+                <div class="max-w-4xl mx-auto py-16 px-8">
+                    <div class="text-center mb-16">
+                        <div class="w-32 h-32 rounded-full bg-white border-2 border-[var(--terracotta)] mx-auto mb-6 flex items-center justify-center text-5xl shadow-lg">👴</div>
+                        <h2 class="serif text-5xl font-bold mb-2">Arthur Chen</h2>
+                        <p class="text-[var(--terracotta)] font-bold uppercase tracking-[0.2em] mb-4">Member since 2024</p>
+                        <p class="text-xl max-w-lg mx-auto opacity-70 serif italic leading-relaxed">"A retired architect finding beauty in the structure of words and the memories of the Bay Area."</p>
+                    </div>
+                    <div class="border-t border-[#DED3C1] pt-12">
+                        <h3 class="text-xs font-bold uppercase tracking-widest text-[#B8A890] mb-10">Published Collection</h3>
+                        <div class="grid grid-cols-1 gap-8">
+                            <div class="bg-white p-8 rounded-xl border border-[#DED3C1] shadow-sm">
+                                <h4 class="serif text-2xl font-bold mb-2">The Golden Gate at Dusk</h4>
+                                <p class="text-sm opacity-50 mb-4">Poetry • Oct 12, 2024</p>
+                                <button class="text-[var(--terracotta)] font-bold uppercase text-xs tracking-widest">Read Piece</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: WRITING STUDIO -->
+            <div id="view-editor" class="view-content hidden view-transition bg-white h-full">
+                <div class="max-w-4xl mx-auto py-16 px-12">
+                    <div class="flex justify-between items-center mb-16">
+                        <button onclick="navigate('home')" class="text-[#B8A890] hover:text-[var(--ink)] flex items-center font-bold">
+                            <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i> Return to Society
+                        </button>
+                        <button class="btn-primary px-10 py-3 rounded-xl font-bold shadow-lg">Publish to the World</button>
+                    </div>
+                    <input type="text" placeholder="Title of your work..." class="serif w-full text-6xl font-bold border-none outline-none mb-10 placeholder-[#E8DFD3]">
+                    <textarea placeholder="Write or speak your story..." class="serif w-full h-[500px] text-3xl leading-relaxed border-none outline-none resize-none placeholder-[#E8DFD3] bg-transparent"></textarea>
+                    
+                    <div class="fixed bottom-12 right-12 flex flex-col items-center">
+                        <button onclick="toggleMic()" id="mic-btn" class="w-24 h-24 btn-primary rounded-full shadow-2xl flex items-center justify-center">
+                            <i data-lucide="mic" id="mic-icon" class="w-10 h-10"></i>
+                        </button>
+                        <span class="mt-4 text-sm font-bold uppercase tracking-widest text-[var(--terracotta)]" id="mic-status">Click to Speak</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        function navigate(view) {
+            document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
+            document.querySelectorAll('.sidebar-link, .active-link').forEach(l => {
+                l.classList.remove('active-link');
+                l.classList.add('sidebar-link');
+            });
+
+            document.getElementById('view-' + view).classList.remove('hidden');
+            
+            const activeNav = document.getElementById('nav-' + view);
+            if (activeNav) {
+                activeNav.classList.add('active-link');
+                activeNav.classList.remove('sidebar-link');
+            }
+
+            const search = document.getElementById('search-container');
+            if (view === 'editor') search.classList.add('invisible');
+            else search.classList.remove('invisible');
+            
+            // Re-scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        let isRecording = false;
+        function toggleMic() {
+            const btn = document.getElementById('mic-btn');
+            const status = document.getElementById('mic-status');
+            isRecording = !isRecording;
+            
+            if (isRecording) {
+                btn.classList.add('animate-pulse');
+                btn.style.backgroundColor = '#ef4444';
+                status.innerText = "The Quill is Listening...";
+            } else {
+                btn.classList.remove('animate-pulse');
+                btn.style.backgroundColor = '';
+                status.innerText = "Click to Speak";
+            }
+        }
+    </script>
+</body>
+</html>
