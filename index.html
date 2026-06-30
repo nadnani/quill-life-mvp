@@ -8,8 +8,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Pinyon+Script&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root { --bg: #FBFAF9; --ink: #111827; --mahogany: #7C2D12; --border: #E5E7EB; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--ink); scroll-behavior: smooth; }
+        :root { --bg: #FBFAF9; --ink: #111827; --mahogany: #7C2D12; --border: #E5E7EB; --text-base: 18px; --text-lg: 24px; }
+        
+        /* High Contrast Overrides */
+        .high-contrast { --bg: #ffffff; --ink: #000000; --mahogany: #000000; --border: #000000; }
+        .high-contrast aside, .high-contrast header { border-color: #000 !important; }
+        
+        /* Large Text Overrides */
+        .large-text { --text-base: 24px; --text-lg: 32px; }
+        .large-text .serif { font-size: 1.5rem !important; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--ink); 
+            font-size: var(--text-base);
+            transition: all 0.2s ease-in-out;
+        }
+        
         .serif { font-family: 'Merriweather', serif; }
         .heritage { font-family: 'Libre Baskerville', serif; }
         .cursive { font-family: 'Pinyon Script', cursive; }
@@ -18,21 +34,18 @@
         .active-link { background-color: #F3F4F6; color: var(--mahogany); border-right: 3px solid var(--mahogany); }
         .fade-in { animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Onboarding Styles */
-        .step-inactive { opacity: 0.3; filter: grayscale(1); pointer-events: none; }
     </style>
 </head>
-<body class="antialiased text-[18px]">
+<body class="antialiased">
 
     <div id="app-root" class="flex min-h-screen">
         
         <!-- SIDEBAR -->
-        <aside id="main-sidebar" class="w-64 bg-white border-r border-gray-200 hidden lg:flex flex-col sticky top-0 h-screen">
+        <aside id="main-sidebar" class="w-72 bg-white border-r border-gray-200 hidden lg:flex flex-col sticky top-0 h-screen transition-colors">
             <div class="p-8">
                 <div class="flex flex-col">
-                    <span class="cursive text-5xl text-[#7C2D12] leading-none">Quill</span>
-                    <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mt-1 ml-1">Life</span>
+                    <span class="cursive text-5xl text-[#7C2D12] leading-none logo-text">Quill</span>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.4em] text-gray-400 mt-1 ml-1 logo-sub">Life</span>
                 </div>
             </div>
             
@@ -40,93 +53,104 @@
                 <button onclick="navigate('home')" id="nav-home" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg active-link">
                     <i data-lucide="layout-template" class="w-5 h-5 mr-3"></i> Home Feed
                 </button>
+                <button onclick="navigate('prompts')" id="nav-prompts" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
+                    <i data-lucide="sparkles" class="w-5 h-5 mr-3"></i> Prompt Library
+                </button>
                 <button onclick="navigate('library')" id="nav-library" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
                     <i data-lucide="archive" class="w-5 h-5 mr-3"></i> My Archives
                 </button>
-                <div class="pt-6 pb-2 px-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Growth</div>
-                <button onclick="navigate('onboarding')" id="nav-onboarding" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
-                    <i data-lucide="plus-circle" class="w-5 h-5 mr-3"></i> Enroll Chapter
-                </button>
-                <button onclick="navigate('admin')" id="nav-admin" class="w-full flex items-center px-4 py-3 text-sm font-semibold rounded-lg sidebar-link">
-                    <i data-lucide="shield-check" class="w-5 h-5 mr-3"></i> Admin Radar
-                </button>
+                
+                <div class="pt-6 pb-2 px-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Settings</div>
+                <div class="px-4 space-y-4 py-2">
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-xs font-bold uppercase tracking-tighter">Large Text</span>
+                        <input type="checkbox" onchange="toggleLargeText()" class="w-4 h-4 accent-[#7C2D12]">
+                    </label>
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-xs font-bold uppercase tracking-tighter">High Contrast</span>
+                        <input type="checkbox" onchange="toggleHighContrast()" class="w-4 h-4 accent-[#7C2D12]">
+                    </label>
+                </div>
             </nav>
 
             <div class="p-4 border-t border-gray-200">
                 <button onclick="navigate('editor')" class="w-full flex items-center justify-center bg-[#7C2D12] text-white py-4 rounded-xl font-bold hover:bg-[#5E220E] shadow-lg transition-all">
-                    <i data-lucide="feather" class="w-5 h-5 mr-2"></i> New Entry
+                    <i data-lucide="feather" class="w-5 h-5 mr-2"></i> Write Entry
                 </button>
             </div>
         </aside>
 
         <!-- MAIN WINDOW -->
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col transition-colors">
             
-            <header id="main-header" class="bg-white border-b border-gray-200 px-10 py-5 flex justify-between items-center sticky top-0 z-40">
+            <header id="main-header" class="bg-white border-b border-gray-200 px-10 py-5 flex justify-between items-center sticky top-0 z-40 transition-colors">
                 <div class="relative w-96">
                     <i data-lucide="search" class="absolute left-3 top-3.5 w-4 h-4 text-gray-400"></i>
-                    <input type="text" placeholder="Search the archives..." class="w-full pl-10 pr-4 py-2 bg-gray-50 border-none rounded-lg text-sm outline-none">
+                    <input type="text" placeholder="Search the archives..." class="w-full pl-10 pr-4 py-2 bg-gray-50 border-none rounded-lg text-sm outline-none focus:ring-1 focus:ring-[#7C2D12]">
                 </div>
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-[#7C2D12] border border-gray-200 flex items-center justify-center font-bold text-white text-xs">NA</div>
-                    <span class="text-sm font-bold text-gray-800">Dr. Adnani</span>
+                <div class="flex items-center gap-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center font-bold text-[#7C2D12]">NA</div>
+                        <span class="text-sm font-bold text-gray-800">Dr. Adnani</span>
+                    </div>
                 </div>
             </header>
 
-            <!-- VIEW: HOME (The Society Feed) -->
+            <!-- VIEW: HOME (Feed) -->
             <div id="view-home" class="view-content fade-in overflow-y-auto">
-                <div class="max-w-3xl mx-auto py-12 px-6" id="main-feed">
-                    <!-- Feed Injected -->
+                <div class="max-w-3xl mx-auto py-12 px-6">
+                    <div id="main-feed" class="space-y-16">
+                        <!-- Feed Injected -->
+                    </div>
                 </div>
             </div>
 
-            <!-- VIEW: CHARTER ONBOARDING (B2B Tool) -->
-            <div id="view-onboarding" class="view-content hidden fade-in p-12 overflow-y-auto bg-gray-50 min-h-screen">
-                <div class="max-w-3xl mx-auto">
-                    <header class="text-center mb-16">
-                        <span class="cursive text-6xl text-[#7C2D12]">Quill</span>
-                        <h2 class="serif text-4xl font-bold mt-4">Establish a Society Chapter</h2>
-                        <p class="text-gray-400 font-bold uppercase text-[10px] tracking-widest mt-2">Charter Partner Enrollment</p>
-                    </header>
-
-                    <div class="space-y-8">
-                        <!-- Step 1 -->
-                        <div class="bg-white p-10 rounded-2xl border border-gray-200 shadow-sm">
-                            <h3 class="font-bold text-xl mb-6 flex items-center gap-3">
-                                <span class="w-8 h-8 rounded-full bg-[#7C2D12] text-white flex items-center justify-center text-xs">1</span>
-                                Chapter Details
-                            </h3>
-                            <div class="grid grid-cols-2 gap-6">
-                                <div class="col-span-2">
-                                    <label class="text-[10px] font-bold uppercase text-gray-400 block mb-2">Facility Name</label>
-                                    <input type="text" placeholder="e.g. Oakwood Manor" class="w-full p-4 bg-gray-50 border-none rounded-lg outline-none focus:ring-1 focus:ring-[#7C2D12]">
-                                </div>
-                                <div>
-                                    <label class="text-[10px] font-bold uppercase text-gray-400 block mb-2">Chapter Location</label>
-                                    <input type="text" placeholder="Brentwood, CA" class="w-full p-4 bg-gray-50 border-none rounded-lg outline-none focus:ring-1 focus:ring-[#7C2D12]">
-                                </div>
-                                <div>
-                                    <label class="text-[10px] font-bold uppercase text-gray-400 block mb-2">Resident Capacity</label>
-                                    <select class="w-full p-4 bg-gray-50 border-none rounded-lg outline-none">
-                                        <option>10 - 20 Residents (Pilot)</option>
-                                        <option>50+ Residents (Scale)</option>
-                                    </select>
-                                </div>
-                            </div>
+            <!-- VIEW: PROMPT LIBRARY -->
+            <div id="view-prompts" class="view-content hidden fade-in p-12 overflow-y-auto">
+                <div class="max-w-5xl mx-auto">
+                    <h2 class="serif text-4xl font-bold mb-2">Inspiration Library</h2>
+                    <p class="text-gray-400 font-bold uppercase text-[10px] tracking-widest mb-12">Browse by Theme</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
+                            <p class="text-[#7C2D12] font-bold uppercase tracking-widest text-[10px] mb-2">Monthly Theme: August</p>
+                            <h3 class="serif text-2xl font-bold mb-4">Summer Memories</h3>
+                            <p class="text-gray-500 mb-6">Reflect on the long afternoons of childhood, favorite vacations, or the changing of the light as autumn approaches.</p>
+                            <button onclick="navigate('editor')" class="text-[#7C2D12] font-bold text-xs uppercase tracking-widest flex items-center">Start Writing <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i></button>
                         </div>
-
-                        <!-- Step 2 -->
-                        <div class="bg-white p-10 rounded-2xl border border-gray-200 shadow-sm opacity-50">
-                            <h3 class="font-bold text-xl mb-6 flex items-center gap-3">
-                                <span class="w-8 h-8 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-xs">2</span>
-                                Institutional Setup
-                            </h3>
-                            <p class="text-sm text-gray-400">Assign your primary Activity Director and choose your first Monthly Journal theme.</p>
+                        <div class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm opacity-60">
+                            <p class="text-gray-400 font-bold uppercase tracking-widest text-[10px] mb-2">Upcoming Theme: September</p>
+                            <h3 class="serif text-2xl font-bold mb-4">Lessons Learned</h3>
+                            <p class="text-gray-500 mb-6">Wisdom gained through experience, advice for the next generation, and the moments that defined your path.</p>
                         </div>
+                    </div>
+                </div>
+            </div>
 
-                        <button onclick="alert('Charter Invitation Sent. Your unique Chapter URL is being synthesized.')" class="w-full py-5 bg-[#7C2D12] text-white rounded-xl font-bold uppercase tracking-widest shadow-2xl hover:bg-[#5E220E] transition-all">
-                            Initialize Chapter Pilot
+            <!-- VIEW: EDITOR -->
+            <div id="view-editor" class="view-content hidden fade-in bg-white h-full">
+                <div class="max-w-4xl mx-auto py-16 px-12">
+                    <div class="flex justify-between items-center mb-12">
+                        <button onclick="navigate('home')" class="text-gray-400 hover:text-gray-900 font-bold text-xs uppercase tracking-widest flex items-center">
+                            <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Discard
                         </button>
+                        <div class="flex items-center gap-6">
+                            <select class="bg-gray-50 border border-gray-100 text-[10px] font-bold uppercase tracking-widest text-gray-500 rounded px-4 py-2">
+                                <option>Memoir</option>
+                                <option>Letter</option>
+                                <option>Poetry</option>
+                            </select>
+                            <button onclick="publishStory()" class="bg-[#7C2D12] text-white px-10 py-3 rounded-lg font-bold uppercase text-xs tracking-widest shadow-lg">Publish</button>
+                        </div>
+                    </div>
+                    <input type="text" id="editor-title" placeholder="Title of your piece..." class="serif w-full text-5xl font-bold border-none outline-none mb-10 placeholder-gray-100">
+                    <textarea id="editor-body" placeholder="Begin your work..." class="serif w-full h-[500px] text-2xl leading-relaxed border-none outline-none resize-none placeholder-gray-100"></textarea>
+                    
+                    <div class="fixed bottom-12 right-12 flex flex-col items-center">
+                        <button onclick="toggleMic()" id="mic-btn" class="w-24 h-24 bg-[#7C2D12] rounded-full shadow-2xl flex items-center justify-center text-white transition-all hover:scale-105 active:scale-95">
+                            <i data-lucide="mic" id="mic-icon" class="w-10 h-10"></i>
+                        </button>
+                        <span class="mt-4 text-[10px] font-bold uppercase tracking-widest text-[#7C2D12]" id="mic-status">Click to Speak</span>
                     </div>
                 </div>
             </div>
@@ -135,17 +159,15 @@
             <div id="view-library" class="view-content hidden fade-in p-12">
                 <div class="max-w-4xl mx-auto">
                     <h2 class="serif text-5xl font-bold mb-10">My Archives</h2>
-                    <div class="bg-white p-10 border border-gray-100 rounded-xl shadow-sm border-l-4 border-l-[#7C2D12]">
-                        <h4 class="serif text-3xl font-bold mb-2">The Blue Buick</h4>
-                        <p class="text-[10px] font-bold uppercase text-gray-400 mb-6">Published Aug 14, 2026</p>
-                        <button class="text-[#7C2D12] font-bold text-xs uppercase tracking-widest">Open Archive</button>
+                    <div id="archive-list" class="grid grid-cols-1 gap-8">
+                        <div class="bg-white p-10 border border-gray-100 rounded-xl shadow-sm border-l-4 border-l-[#7C2D12]">
+                            <h4 class="serif text-3xl font-bold mb-2">The Blue Buick</h4>
+                            <p class="text-[10px] font-bold uppercase text-gray-400 mb-6">Published Aug 14, 2026</p>
+                            <button class="text-[#7C2D12] font-bold text-xs uppercase tracking-widest">Open Archive</button>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- REMAINING VIEWS PERSISTENT -->
-            <div id="view-admin" class="view-content hidden p-12">...</div>
-            <div id="view-editor" class="view-content hidden bg-white h-full">...</div>
 
         </div>
     </div>
@@ -153,37 +175,51 @@
     <script>
         lucide.createIcons();
 
-        // 1. DATA
+        // 1. STATE & DATA
         const state = {
             stories: [
                 { id: 101, author: "Arthur Chen", initials: "AC", title: "The Midnight Train to Emeryville", content: "In 1952, the fog in the East Bay didn't just sit on the water; it felt like a heavy woolen blanket. I remember the sound of the whistle, a lonely call that promised adventure elsewhere...", category: "Memoir", hearts: 14 }
             ]
         };
 
-        // 2. RENDERING
+        // 2. ACCESSIBILITY LOGIC
+        function toggleLargeText() {
+            document.body.classList.toggle('large-text');
+        }
+
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+            const logo = document.querySelector('.logo-text');
+            if(document.body.classList.contains('high-contrast')) {
+                logo.style.color = '#000';
+            } else {
+                logo.style.color = '#7C2D12';
+            }
+        }
+
+        // 3. RENDERING
         function renderFeed() {
             const feed = document.getElementById('main-feed');
             feed.innerHTML = state.stories.map(s => `
                 <article class="bg-white border-b border-gray-100 pb-16 fade-in">
                     <div class="flex justify-between items-center mb-8">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full bg-gray-50 flex items-center justify-center text-[#7C2D12] font-bold text-xs">${s.initials}</div>
+                            <div class="w-12 h-12 rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center text-[#7C2D12] font-bold text-xs">${s.initials}</div>
                             <h4 class="font-bold text-base text-gray-900">${s.author}</h4>
                         </div>
-                        <span class="text-[10px] font-bold uppercase tracking-widest text-[#7C2D12] px-3 py-1 bg-amber-50 rounded-full">September Edition Candidate</span>
                     </div>
                     <h2 class="serif text-4xl font-bold mb-6 leading-tight">${s.title}</h2>
                     <p class="serif text-2xl text-gray-700 leading-relaxed mb-10 opacity-90">${s.content}</p>
                     <div class="flex gap-10">
-                        <button class="flex items-center text-gray-400 hover:text-red-500 font-bold transition-all"><i data-lucide="heart" class="w-6 h-6 mr-3"></i> ${s.hearts}</button>
-                        <button class="flex items-center text-gray-400 hover:text-[#7C2D12] font-bold"><i data-lucide="volume-2" class="w-6 h-6 mr-3"></i> Listen</button>
+                        <button class="flex items-center text-red-500 font-bold"><i data-lucide="heart" class="w-6 h-6 mr-3"></i> ${s.hearts}</button>
+                        <button class="flex items-center text-gray-400 font-bold"><i data-lucide="volume-2" class="w-6 h-6 mr-3"></i> Listen</button>
                     </div>
                 </article>
             `).join('');
             lucide.createIcons();
         }
 
-        // 3. LOGIC
+        // 4. NAVIGATION
         function navigate(view) {
             document.querySelectorAll('.view-content').forEach(v => v.classList.add('hidden'));
             document.querySelectorAll('.sidebar-link, .active-link').forEach(l => { l.classList.remove('active-link'); l.classList.add('sidebar-link'); });
@@ -193,6 +229,23 @@
             
             if (view === 'home') renderFeed();
             window.scrollTo(0, 0);
+        }
+
+        function publishStory() {
+            const title = document.getElementById('editor-title').value;
+            const body = document.getElementById('editor-body').value;
+            if (!title || !body) return;
+            state.stories.unshift({ id: Date.now(), author: "Dr. Adnani", initials: "NA", title, content: body, category: "Memoir", hearts: 0 });
+            navigate('home');
+        }
+
+        let isListening = false;
+        function toggleMic() {
+            const btn = document.getElementById('mic-btn');
+            const status = document.getElementById('mic-status');
+            isListening = !isListening;
+            if (isListening) { btn.classList.add('animate-pulse', 'bg-red-600'); status.innerText = "Listening..."; }
+            else { btn.classList.remove('animate-pulse', 'bg-red-600'); status.innerText = "Click to Speak"; }
         }
 
         // Init
